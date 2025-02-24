@@ -3,6 +3,7 @@ import example.model.BankAccount;
 import example.model.SimpleBankAccount;
 
 import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -21,7 +22,7 @@ class SimpleBankAccountTest {
     private BankAccount bankAccount;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         accountHolder = new AccountHolder(HOLDER_NAME, HOLDER_SURNAME, HOLDER_ID);
         bankAccount = new SimpleBankAccount(accountHolder, STARTING_BALANCE);
     }
@@ -48,13 +49,19 @@ class SimpleBankAccountTest {
     void testWithdraw() {
         bankAccount.deposit(accountHolder.getId(), DEPOSIT_AMOUNT);
         bankAccount.withdraw(accountHolder.getId(), WITHDRAW_AMOUNT);
-        assertEquals(DEPOSIT_AMOUNT-WITHDRAW_AMOUNT, bankAccount.getBalance());
+        assertEquals(DEPOSIT_AMOUNT - WITHDRAW_AMOUNT, bankAccount.getBalance());
     }
 
     @Test
     void testWrongWithdraw() {
         bankAccount.deposit(accountHolder.getId(), DEPOSIT_AMOUNT);
-        bankAccount.withdraw(WRONG_HOLDER_ID, WITHDRAW_AMOUNT);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.withdraw(WRONG_HOLDER_ID, WITHDRAW_AMOUNT));
         assertEquals(DEPOSIT_AMOUNT, bankAccount.getBalance());
+    }
+
+    @Test
+    void testWithdrawMoreThanBalance() {
+        bankAccount.deposit(accountHolder.getId(), DEPOSIT_AMOUNT);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.withdraw(accountHolder.getId(), DEPOSIT_AMOUNT + WITHDRAW_AMOUNT));
     }
 }
