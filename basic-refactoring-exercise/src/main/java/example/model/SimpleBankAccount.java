@@ -7,12 +7,15 @@ package example.model;
  */
 public class SimpleBankAccount implements BankAccount {
 
+
     private double balance;
     private final AccountHolder holder;
+    private final double fee;
 
-    public SimpleBankAccount(final AccountHolder holder, final double balance) {
+    public SimpleBankAccount(final AccountHolder holder, final double balance, final double fee) {
         this.holder = holder;
         this.balance = balance;
+        this.fee = fee;
     }
 
     @Override
@@ -40,12 +43,12 @@ public class SimpleBankAccount implements BankAccount {
         if (!checkUser(userID)) {
             throw new IllegalArgumentException("The user is not allowed to withdraw from this account");
         } else {
-            this.balance -= amount;
+            this.balance -= (amount + fee);
         }
     }
 
     private boolean isWithdrawAllowed(final double amount) {
-        return this.balance >= amount;
+        return this.balance >= (amount - fee);
     }
 
     private boolean checkUser(final int id) {
