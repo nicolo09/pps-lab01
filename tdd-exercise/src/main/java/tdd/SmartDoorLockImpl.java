@@ -3,15 +3,20 @@ package tdd;
 public class SmartDoorLockImpl implements SmartDoorLock {
 
     private boolean isLocked = false;
+    private int pin;
 
     @Override
     public void setPin(int pin) {
-
+        this.pin = pin;
     }
 
     @Override
     public void unlock(int pin) {
-
+        if (this.pin == pin) {
+            isLocked = false;
+        } else {
+            throw new IllegalArgumentException("Invalid PIN");
+        }
     }
 
     @Override
